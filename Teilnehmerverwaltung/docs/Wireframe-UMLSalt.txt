@@ -1,0 +1,33 @@
+@startsalt
+{
+  <b>NeuStart IT-Akademie
+  <b>Teilnehmerverwaltung
+{
+  Teilnehmerliste       
+  Suche: |"                   "
+}
+   {
+    {#
+      Nr| Name         | Kurs | Status
+    <b> > 1000 | <b>Müller Anna  | <b>FIAE-25A | <b>Aktiv
+      1001 | Schmidt Peter| FISI-25 | Aktiv
+      1002 | Weber Lisa   | FIAE-23 | Abgeschlossen
+    }
+  }
+
+  <b>Teilnehmerdaten
+
+  {
+    Vorname *:     | "Anna                "
+    Nachname *:    | "Müller              "
+    Geburtsdatum:  | "01.01.2000          "
+    Umschulung *:  | ^FIAE-25A^
+    Kostenträger *:| ^Agentur für Arbeit Stuttgart^
+    Status *:      | ^Aktiv^
+  }
+  {<i>'* Pflichtfelder}
+  {
+    [Neu] | [Speichern] | [Löschen]
+  }
+}
+@endsalt
