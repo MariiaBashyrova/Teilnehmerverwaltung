@@ -4,9 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Teilnehmerverwaltung"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        xmlns:vm="clr-namespace:Teilnehmerverwaltung.ViewModels"
 
-    </Grid>
+        mc:Ignorable="d"
+        Title="Teilnehmer Verwaltung" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
+    <DockPanel >
+        <TextBlock DockPanel.Dock="Top" Text="Master-View" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
+        <ListBox 
+         ItemsSource="{Binding Teilnehmers}"
+         SelectedItem="{Binding SelectedTeilnehmer}"
+          >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding VollName}" />
+                        <TextBlock Text=" - " />
+       
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+    </DockPanel>
 </Window>

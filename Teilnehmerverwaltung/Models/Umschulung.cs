@@ -13,4 +13,13 @@ public class Umschulung
     public DateOnly Beginn { get; set; }
     public DateOnly Ende { get; set; }
     public string Raum { get; set; }
+
+    public Umschulung(string kursNr, string bezeichnung, DateOnly beginn, DateOnly ende, string raum)
+    {
+        KursNr = kursNr;
+        Bezeichnung = bezeichnung;
+        Beginn = beginn;
+        Ende = ende;
+        Raum = raum;
+    }
 }

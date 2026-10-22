@@ -13,4 +13,11 @@ public class Kostentraeger
     public string TelefonNummer { get; set; }
     public string Ansprechpartner { get; set; }
 
+    public Kostentraeger(int kostentraegerNr, string bezeichnung, string telefonNummer, string ansprechpartner)
+    {
+        KostentraegerNr = kostentraegerNr;
+        Bezeichnung = bezeichnung;
+        TelefonNummer = telefonNummer;
+        Ansprechpartner = ansprechpartner;
+    }
 }
