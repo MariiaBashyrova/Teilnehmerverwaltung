@@ -7,11 +7,110 @@
         xmlns:vm="clr-namespace:Teilnehmerverwaltung.ViewModels"
 
         mc:Ignorable="d"
-        Title="Teilnehmer Verwaltung" Height="450" Width="450">
+        Title="Teilnehmerverwaltung"
+        Width="400" Height="650"
+        MinWidth="400" MinHeight="500"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
-   
+    <Window.Resources>
+        <!-- Färbe -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#315B7D"/>
+        <SolidColorBrush x:Key="PrimaryLightBrush" Color="#EAF1F6"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#C9D4DE"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#243746"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#F4F7FA"/>
+        <!--  -->
+        <Style x:Key="AcademyHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Margin" Value="12,12,12,2"/>
+        </Style>
+
+        <!--  -->
+        <Style x:Key="AppHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="Margin" Value="12,0,12,10"/>
+        </Style>
+        <!-- -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4,3"/>
+        </Style>
+
+        <!--  -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Margin" Value="4,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        </Style>
+
+        <!--  -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="4,3"/>
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="4,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <!--  -->
+        <Style TargetType="Button">
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Margin" Value="4,6"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Grid -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowHeight" Value="30"/>
+            <Setter Property="ColumnHeaderHeight" Value="32"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="VerticalGridLinesBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="AlternationCount" Value="2"/>
+        </Style>
+
+        <!--  -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        </Style>
+
+        <!--  -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -21,123 +120,130 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock  Text="NeuStart IT-Akademie : Teilnehmerverwaltung"/>
+        <StackPanel  Grid.Row="0" Background="{StaticResource SurfaceBrush}">
+            <TextBlock Text="NeuStart IT-Akademie"
+               Style="{StaticResource AcademyHeaderStyle}"/>
+
+            <TextBlock Text="Teilnehmerverwaltung"
+               Style="{StaticResource AppHeaderStyle}"/>
+        </StackPanel>
         <Grid  Grid.Row="1">
-           
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Teilnehmerliste"/>
-
-
-            <!-- Nachname -->
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Teilnehmerliste" FontWeight="Bold"/>
             <TextBlock Grid.Row="1" Grid.Column="0"  Text="Suche: "  />
-
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Suche}" />
         </Grid>
-        <DockPanel Grid.Row="2">
-        
-            
-                    <DataGrid
-                ItemsSource="{Binding Teilnehmers}"
-                SelectedItem="{Binding SelectedTeilnehmer}"
-                AutoGenerateColumns="False"
-                IsReadOnly="True"
-                SelectionMode="Single"
-                CanUserAddRows="False">
+       
+            <DataGrid Grid.Row="2" ItemsSource="{Binding Teilnehmers}"
+          SelectedItem="{Binding SelectedTeilnehmer}"
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          SelectionMode="Single"
+          CanUserAddRows="False">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-            Header="TN-Nr."
-            Binding="{Binding TeilnehmerNr}" />
+                    <DataGridTextColumn Header="TN-Nr."
+                            Binding="{Binding TeilnehmerNr}"
+                            Width="90"/>
 
-                    <DataGridTextColumn
-            Header="Name"
-            Binding="{Binding VollName}" />
+                    <DataGridTextColumn Header="Name"
+                            Binding="{Binding VollName}"
+                            Width="2*"/>
 
+                    <DataGridTextColumn Header="Kurs"
+                            Binding="{Binding Umschulung.KursNr}"
+                            Width="*"/>
 
-
-
-                    <DataGridTextColumn
-            Header="Kurs"
-            Binding="{Binding Umschulung.KursNr}" />
-                    <DataGridTextColumn
-            Header="Status"
-            Binding="{Binding Status}" />
+                    <DataGridTextColumn Header="Status"
+                            Binding="{Binding Status}"
+                            Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </DockPanel>
-    <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray"/>
-        <DockPanel Grid.Row="4" IsEnabled="{Binding FormularAktiv}">
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+        
+        <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray"/>
 
+        <Grid Grid.Row="4" IsEnabled="{Binding FormularAktiv}" Margin="4,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Linke Spalte -->
+            <Grid Grid.Column="0" Margin="0,0,12,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Vorname *"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Vorname}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Nachname *"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Nachname}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="E-Mail"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EMail}"/>
+            </Grid>
+
+            <!-- Rechte Spalte -->
+            <Grid Grid.Column="1" Margin="12,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Vorname -->
-                <TextBlock Grid.Row="0" Grid.Column="0"
-               Text="Vorname *"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Geb. Datum"/>
+                <DatePicker Grid.Row="0" Grid.Column="1"
+                    SelectedDate="{Binding Geburtsdatum, Mode=TwoWay}"/>
 
-                <TextBox Grid.Row="0" Grid.Column="1"
-             Text="{Binding Vorname}"
-             />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Umschulung *"/>
+                <ComboBox Grid.Row="1" Grid.Column="1"
+                  DisplayMemberPath="KursNr"
+                  ItemsSource="{Binding Umschulungen}"
+                  SelectedItem="{Binding Umschulung, Mode=TwoWay}"/>
 
-                <!-- Nachname -->
-                <TextBlock Grid.Row="1" Grid.Column="0"
-               Text="Nachname *"
-               />
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Kostenträger *"/>
+                <ComboBox Grid.Row="2" Grid.Column="1"
+                  DisplayMemberPath="Bezeichnung"
+                  ItemsSource="{Binding Kostentraegers}"
+                  SelectedItem="{Binding Kostentraeger, Mode=TwoWay}"/>
 
-                <TextBox Grid.Row="1" Grid.Column="1"
-             Text="{Binding Nachname}"
-             />
-
-                <!-- E-Mail -->
-                <TextBlock Grid.Row="2" Grid.Column="0"
-               Text="E-Mail"
-               />
-
-                <TextBox Grid.Row="2" Grid.Column="1"
-             Text="{Binding EMail}"
-            />
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Geb. Datum"/>
-                <DatePicker  Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Geburtsdatum, Mode=TwoWay}"/>
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Umschulung *"/>
-                <ComboBox Grid.Row ="4" Grid.Column="2" DisplayMemberPath="KursNr" ItemsSource="{Binding Umschulungen}" SelectedItem="{Binding Umschulung, Mode=TwoWay}" />
-                    
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Kostenträger *"/>
-                <ComboBox Grid.Row ="5" Grid.Column="2" DisplayMemberPath="Bezeichnung" ItemsSource="{Binding Kostentraegers}" SelectedItem="{Binding Kostentraeger, Mode=TwoWay}" />
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="Status"/>
-                <ComboBox Grid.Row ="6" Grid.Column="2" ItemsSource="{Binding TeilnehmerStatusWerte}" SelectedItem="{Binding Status, Mode=TwoWay}" />
-                <TextBlock Grid.Row="7" Grid.Column="0" Text="* Pflichtfelder"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Status"/>
+                <ComboBox Grid.Row="3" Grid.Column="1"
+                  ItemsSource="{Binding TeilnehmerStatusWerte}"
+                  SelectedItem="{Binding Status, Mode=TwoWay}"/>
             </Grid>
-           
-        </DockPanel>
-        
-            <StackPanel Grid.Row="5"  Orientation="Horizontal">
-            
-                <Button Content="Neu" Command="{Binding NeuCommand}" />
-                <Button Content="Speichern" Command="{Binding SpeichernCommand}" />
-                <Button Content="Löschen" Command="{Binding LoeschenCommand}" />
-           
+        </Grid>
+
+
+
+        <StackPanel Grid.Row="5"  Orientation="Horizontal">
+
+            <Button Content="Neu" Command="{Binding NeuCommand}" />
+            <Button Content="Speichern" Command="{Binding SpeichernCommand}" />
+            <Button Content="Löschen" Command="{Binding LoeschenCommand}" />
+
         </StackPanel>
-       
+
     </Grid>
 </Window>
