@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using Teilnehmerverwaltung.Helpers;
 using Teilnehmerverwaltung.Models;
 using Teilnehmerverwaltung.Services;
@@ -17,10 +18,9 @@ namespace Teilnehmerverwaltung.ViewModels;
 internal class MainWindowViewModel : ViewModelBase
 {
     public ObservableCollection<Teilnehmer> Teilnehmers { get; set; }
-
+    private TeilnehmerVerwaltung TeilnehmerVerwaltung;
     private Teilnehmer _selectedTeilnehmer;
 
-    private TeilnehmerVerwaltung TeilnehmerVerwaltung;
     public Teilnehmer SelectedTeilnehmer { get =>_selectedTeilnehmer; 
         set
         {
@@ -28,9 +28,7 @@ internal class MainWindowViewModel : ViewModelBase
             {
                 FormularFuellen();
                 LoeschenCommand?.AusfuehrbarkeitAktualisieren();
-                //SpeichernCommand?.AusfuehrbarkeitAktualisieren();
                 OnPropertyChanged(nameof(FormularAktiv));
-
 
             }
             ;
@@ -42,9 +40,9 @@ internal class MainWindowViewModel : ViewModelBase
         get => _hatAenderungen;
         private set { if (SetProperty(ref _hatAenderungen, value)) SpeichernCommand?.AusfuehrbarkeitAktualisieren() ; }
     }
-
+    
     private bool _formularWirdGeladen;
-    public string Suche {  get; set; }
+    
 
     private bool _istNeuerTeilnehmer;
 
@@ -129,20 +127,24 @@ internal class MainWindowViewModel : ViewModelBase
         set { if (SetProperty(ref _status, value) && !_formularWirdGeladen) HatAenderungen = true; }
 
     }
+
+    public ICollectionView TeilnehmerView { get; }
+    #region Konstruktor
     public MainWindowViewModel()
     {
         TeilnehmerVerwaltung = new TeilnehmerVerwaltung();
         Teilnehmers = new ObservableCollection<Teilnehmer>(TeilnehmerVerwaltung.AlleTeilnehmer());
         Umschulungen = new ObservableCollection<Umschulung>(TeilnehmerVerwaltung.AlleUmschulungen());
         Kostentraegers = new ObservableCollection<Kostentraeger>(TeilnehmerVerwaltung.AlleKostentraeger());
-        //'SelectedBuch = Buecher[1];
-
+        
 
         NeuCommand = new RelayCommand(FuegeHinzu);
         SpeichernCommand = new RelayCommand(Speichern, KannSpeichern);
-        LoeschenCommand = new RelayCommand(Loeschen, KannLoeschen); 
+        LoeschenCommand = new RelayCommand(Loeschen, KannLoeschen);
+        TeilnehmerView = CollectionViewSource.GetDefaultView(Teilnehmers);
+        TeilnehmerView.Filter = FilterTeilnehmer;
     }
-
+    #endregion
     private void FormularFuellen()
     {
         _formularWirdGeladen = true;
@@ -170,7 +172,7 @@ internal class MainWindowViewModel : ViewModelBase
         Status          = SelectedTeilnehmer.Status;
         _formularWirdGeladen = false;
     }
-
+    #region Commands
     public RelayCommand NeuCommand { get; }
     public RelayCommand SpeichernCommand { get; }
     public RelayCommand LoeschenCommand { get; }
@@ -185,22 +187,9 @@ internal class MainWindowViewModel : ViewModelBase
 
         if (result != MessageBoxResult.Yes)
             return;
-
-        
-        int index = Teilnehmers.IndexOf(SelectedTeilnehmer);
-        
-        
         TeilnehmerVerwaltung.Entfernen(SelectedTeilnehmer);
         Teilnehmers.Remove(SelectedTeilnehmer);
-
-        if (Teilnehmers.Count > 0)
-        {
-            if (index >= Teilnehmers.Count)
-                index = Teilnehmers.Count - 1;
-
-            SelectedTeilnehmer = Teilnehmers[index];
-        }
-        else SelectedTeilnehmer = null;
+        SelectedTeilnehmer = null;
         
     }
 
@@ -289,5 +278,64 @@ internal class MainWindowViewModel : ViewModelBase
     {
         return HatAenderungen;
     }
+    #endregion
 
+    #region Filter
+    private string _suche;
+    public string Suche
+    {
+        get => _suche;
+        set
+        {
+            if (SetProperty(ref _suche, value)) TeilnehmerView.Refresh();
+        }
+    }
+
+    private Umschulung? _ausgewaehlteUmschulung;
+
+    public Umschulung? AusgewaehlteUmschulung
+    {
+        get => _ausgewaehlteUmschulung;
+        set
+        {
+            if (SetProperty(ref _ausgewaehlteUmschulung, value))
+                TeilnehmerView.Refresh();
+        }
+    }
+
+    private TeilnehmerStatus? _ausgewaehlterStatus;
+
+    public TeilnehmerStatus? AusgewaehlterStatus
+    {
+        get => _ausgewaehlterStatus;
+        set
+        {
+            if (SetProperty(ref _ausgewaehlterStatus, value))
+                TeilnehmerView.Refresh();
+        }
+    }
+    private bool FilterTeilnehmer(object obj)
+    {
+        if (obj is not Teilnehmer teilnehmer)
+            return false;
+
+        string suchtext = Suche?.Trim() ?? "";
+
+        bool namePasst =
+            string.IsNullOrEmpty(suchtext) ||
+            (teilnehmer.VollName?.Contains(
+                suchtext,
+                StringComparison.OrdinalIgnoreCase) ?? false);
+
+        bool umschulungPasst =
+            AusgewaehlteUmschulung == null ||
+            teilnehmer.Umschulung == AusgewaehlteUmschulung;
+
+        bool statusPasst =
+            AusgewaehlterStatus == null ||
+            teilnehmer.Status == AusgewaehlterStatus;
+
+        return namePasst && umschulungPasst && statusPasst;
+    }
+    #endregion
 }

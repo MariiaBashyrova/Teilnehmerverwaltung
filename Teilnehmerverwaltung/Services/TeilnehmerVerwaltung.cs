@@ -48,7 +48,7 @@ public class TeilnehmerVerwaltung
         Umschulung? umschulung, Kostentraeger? kostentraeger, Teilnehmer? aktuellerTeilnehmer)
     {
         if (string.IsNullOrWhiteSpace(vorname) || string.IsNullOrWhiteSpace(nachname) ||
-            string.IsNullOrWhiteSpace(email) || !email.Contains('@') || umschulung == null || kostentraeger == null)
+            (!email.Contains('@') && !string.IsNullOrWhiteSpace(email)) || umschulung == null || kostentraeger == null)
             return false;
 
         return !_repository.AlleLaden().Any(t => t != aktuellerTeilnehmer &&

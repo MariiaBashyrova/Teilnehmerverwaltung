@@ -132,6 +132,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -140,10 +142,13 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Teilnehmerliste" FontWeight="Bold"/>
             <TextBlock Grid.Row="1" Grid.Column="0"  Text="Suche: "  />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Suche}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Suche, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox Grid.Row="1" Grid.Column="3" ItemsSource="{Binding TeilnehmerStatusWerte}" SelectedItem="{Binding AusgewaehlterStatus, Mode=TwoWay}"/>
+            <ComboBox Grid.Row="1" Grid.Column="2" DisplayMemberPath="KursNr" ItemsSource="{Binding Umschulungen}" SelectedItem="{Binding AusgewaehlteUmschulung, Mode=TwoWay}"/>
+
         </Grid>
-       
-            <DataGrid Grid.Row="2" ItemsSource="{Binding Teilnehmers}"
+
+        <DataGrid x:Name="TeilnehmerDataGrid" Grid.Row="2" ItemsSource="{Binding TeilnehmerView}"
           SelectedItem="{Binding SelectedTeilnehmer}"
           AutoGenerateColumns="False"
           IsReadOnly="True"
@@ -190,13 +195,13 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Vorname *"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Vorname}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Vorname, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Nachname *"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Nachname}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Nachname, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="E-Mail"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EMail}"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EMail, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
 
             <!-- Rechte Spalte -->
@@ -240,8 +245,8 @@
         <StackPanel Grid.Row="5"  Orientation="Horizontal">
 
             <Button Content="Neu" Command="{Binding NeuCommand}" />
-            <Button Content="Speichern" Command="{Binding SpeichernCommand}" />
-            <Button Content="Löschen" Command="{Binding LoeschenCommand}" />
+            <Button Content="Speichern" Command="{Binding SpeichernCommand}" Click="Button_Click"/>
+            <Button Content="Löschen" Command="{Binding LoeschenCommand}" Click="Button_Click"/>
 
         </StackPanel>
 
