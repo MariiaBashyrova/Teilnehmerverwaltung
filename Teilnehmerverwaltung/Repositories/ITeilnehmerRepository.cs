@@ -14,6 +14,6 @@ internal interface ITeilnehmerRepository
     List<Umschulung> AlleUmschulungen();
     List<Kostentraeger> AlleKostentraeger();
     public bool Loeschen(Teilnehmer t);
-
     public bool Aktualisieren(Teilnehmer t);
+    public int GetTeilnehmerNummer();
 }

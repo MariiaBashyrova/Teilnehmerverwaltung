@@ -35,7 +35,8 @@ public class InMemoryTeilnehmerRepository : ITeilnehmerRepository
         _teilnehmer.Remove(t);
         return true;
     }
-
+    public int GetTeilnehmerNummer() =>
+    _teilnehmer.Count > 0 ? _teilnehmer.Max(t => t.TeilnehmerNr) + 1 : 1001;
     public List<Teilnehmer> AlleLaden() => _teilnehmer;
     public List<Umschulung> AlleUmschulungen() => _umschulungen;
     public List<Kostentraeger> AlleKostentraeger() => _kostentraeger;

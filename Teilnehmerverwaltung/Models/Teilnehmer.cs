@@ -20,8 +20,8 @@ public class Teilnehmer
     public Umschulung Umschulung { get; set; }
     public Kostentraeger Kostentraeger { get; set; }
 
-    public Teilnehmer(int teilnehmerNr, string vorname, string nachname, DateOnly geburtsdatum, string eMail, 
-        TeilnehmerStatus status, Umschulung umschulung, Kostentraeger kostentraeger)
+    public Teilnehmer(int teilnehmerNr, string vorname, string nachname, DateOnly? geburtsdatum, string eMail, 
+        TeilnehmerStatus? status, Umschulung umschulung, Kostentraeger kostentraeger)
     {
         TeilnehmerNr = teilnehmerNr;
         Vorname = vorname;

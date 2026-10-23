@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -152,6 +153,10 @@ internal class MainWindowViewModel : ViewModelBase
             Nachname = string.Empty;
             EMail = string.Empty;
             Geburtsdatum = null;
+            Umschulung = null;
+            Kostentraeger = null;
+            Status = null;
+            _formularWirdGeladen = false;
             return;
         }
 
@@ -181,11 +186,13 @@ internal class MainWindowViewModel : ViewModelBase
         if (result != MessageBoxResult.Yes)
             return;
 
-        var teilnehmer = SelectedTeilnehmer;
-        int index = Teilnehmers.IndexOf(SelectedTeilnehmer);
-        // Teilnehmers.Remove(teilnehmer);
         
-        TeilnehmerVerwaltung.Entfernen(teilnehmer);
+        int index = Teilnehmers.IndexOf(SelectedTeilnehmer);
+        
+        
+        TeilnehmerVerwaltung.Entfernen(SelectedTeilnehmer);
+        Teilnehmers.Remove(SelectedTeilnehmer);
+
         if (Teilnehmers.Count > 0)
         {
             if (index >= Teilnehmers.Count)
@@ -204,15 +211,9 @@ internal class MainWindowViewModel : ViewModelBase
 
     private void FuegeHinzu()
     {
-        //var neuesBuch = new BuchViewModel
-        //{
-        //    Titel = "Neues Buch",
-        //    Autor = "Unbekannt",
-        //    Jahr = DateTime.Now.Year,
-        //    Kategorie = "Unbekannt"
-        //};
-        //Buecher.Add(neuesBuch);
-        //SelectedBuch = neuesBuch;
+        SelectedTeilnehmer = null;
+        IstNeuerTeilnehmer = true;
+        FormularFuellen();
     }
 
     private void Speichern()
@@ -225,14 +226,13 @@ internal class MainWindowViewModel : ViewModelBase
 
         if (result != MessageBoxResult.Yes)
             return;
-        if (SelectedTeilnehmer == null || !HatAenderungen)
-            return;
+        
 
         // 1. Daten prüfen
-        if (SelectedTeilnehmer == null || !HatAenderungen)
+        if (!HatAenderungen) 
             return;
 
-        var geburtsdatum = DateOnly.FromDateTime(Geburtsdatum.Value);
+        DateOnly? geburtsdatum = Geburtsdatum.HasValue ? DateOnly.FromDateTime(Geburtsdatum.Value) : null;
 
         if (!TeilnehmerVerwaltung.Pruefen(
                 Vorname,
@@ -248,16 +248,37 @@ internal class MainWindowViewModel : ViewModelBase
         }
 
         // 2. Daten übernehmen
-        SelectedTeilnehmer.Vorname = Vorname.Trim();
-        SelectedTeilnehmer.Nachname = Nachname.Trim();
-        SelectedTeilnehmer.EMail = EMail.Trim();
+        int tnummer = (SelectedTeilnehmer == null)? TeilnehmerVerwaltung.GetTeilnehmerNummer() : SelectedTeilnehmer.TeilnehmerNr;
+        
+            DateOnly ? geburst = Geburtsdatum.HasValue ? DateOnly.FromDateTime(Geburtsdatum.Value) : null;
+        Teilnehmer neuerTeilnehmer = new Teilnehmer(tnummer, Vorname.Trim(), Nachname.Trim(),
+            geburst, EMail.Trim(), Status, Umschulung, Kostentraeger);
+        
+        int index = (SelectedTeilnehmer==null) ? -1: Teilnehmers.IndexOf(SelectedTeilnehmer);
 
-        if (Geburtsdatum.HasValue)
-        {
-            SelectedTeilnehmer.Geburtsdatum =
-                DateOnly.FromDateTime(Geburtsdatum.Value);
+        try 
+            {
+            if (index < 0)
+            {
+                TeilnehmerVerwaltung.Hinzufuegen(neuerTeilnehmer);
+                Teilnehmers.Add(neuerTeilnehmer);
+            }
+
+            else
+            {
+                TeilnehmerVerwaltung.Aktualisieren(neuerTeilnehmer);
+                Teilnehmers[index] = neuerTeilnehmer;
+            }
         }
-        OnPropertyChanged(nameof(Teilnehmers));
+        catch (Exception ex)
+        {
+            MessageBox.Show("Der Teilnehmer konnte nicht gespeichert werden."+ex);
+
+            return;
+        }
+        
+        SelectedTeilnehmer = neuerTeilnehmer;
+
         // 3. Änderungen zurücksetzen
         HatAenderungen = false;
         SpeichernCommand?.AusfuehrbarkeitAktualisieren();
@@ -266,8 +287,7 @@ internal class MainWindowViewModel : ViewModelBase
 
     private bool KannSpeichern()
     {
-        
-        return SelectedTeilnehmer != null && HatAenderungen;
+        return HatAenderungen;
     }
 
 }

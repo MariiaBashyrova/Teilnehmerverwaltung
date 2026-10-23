@@ -7,19 +7,23 @@
         xmlns:vm="clr-namespace:Teilnehmerverwaltung.ViewModels"
 
         mc:Ignorable="d"
-        Title="Teilnehmer Verwaltung" Height="450" Width="600">
+        Title="Teilnehmer Verwaltung" Height="450" Width="450">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
+   
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid  Grid.Row="0">
+        <TextBlock  Text="NeuStart IT-Akademie : Teilnehmerverwaltung"/>
+        <Grid  Grid.Row="1">
+           
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="300"/>
@@ -37,8 +41,8 @@
 
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Suche}" />
         </Grid>
-        <DockPanel Grid.Row="1">
-        <TextBlock DockPanel.Dock="Top" Text="NeuStart IT-Akademie : Teilnehmerverwaltung"/>
+        <DockPanel Grid.Row="2">
+        
             
                     <DataGrid
                 ItemsSource="{Binding Teilnehmers}"
@@ -57,26 +61,24 @@
             Header="Name"
             Binding="{Binding VollName}" />
 
-                    <DataGridTextColumn
-            Header="Geburtsdatum"
-            Binding="{Binding Geburtsdatum, StringFormat={}{0:dd.MM.yyyy}}" />
+
+
 
                     <DataGridTextColumn
-            Header="E-Mail"
-            Binding="{Binding EMail}" />
-
+            Header="Kurs"
+            Binding="{Binding Umschulung.KursNr}" />
                     <DataGridTextColumn
             Header="Status"
             Binding="{Binding Status}" />
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-    <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray"/>
-        <DockPanel Grid.Row="3" IsEnabled="{Binding FormularAktiv}">
+    <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray"/>
+        <DockPanel Grid.Row="4" IsEnabled="{Binding FormularAktiv}">
             <Grid >
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -128,10 +130,14 @@
             </Grid>
            
         </DockPanel>
-        <StackPanel  Grid.Row="4" Orientation="Horizontal">
-            <Button Content="Neu" Command="{Binding NeuCommand}" />
-            <Button Content="Speichern" Command="{Binding SpeichernCommand}" />
-            <Button Content="Löschen" Command="{Binding LoeschenCommand}" />
+        
+            <StackPanel Grid.Row="5"  Orientation="Horizontal">
+            
+                <Button Content="Neu" Command="{Binding NeuCommand}" />
+                <Button Content="Speichern" Command="{Binding SpeichernCommand}" />
+                <Button Content="Löschen" Command="{Binding LoeschenCommand}" />
+           
         </StackPanel>
+       
     </Grid>
 </Window>

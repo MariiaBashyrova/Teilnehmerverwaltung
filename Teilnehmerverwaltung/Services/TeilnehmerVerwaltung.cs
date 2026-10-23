@@ -35,6 +35,12 @@ public class TeilnehmerVerwaltung
         
     }
 
+    public void Aktualisieren(Teilnehmer t)
+    {
+        if (_repository.Aktualisieren(t))
+            return;
+
+    }
     public IReadOnlyList<Teilnehmer> AlleTeilnehmer() => _repository.AlleLaden();
     public IReadOnlyList<Umschulung> AlleUmschulungen() => _repository.AlleUmschulungen();
     public IReadOnlyList<Kostentraeger> AlleKostentraeger() => _repository.AlleKostentraeger();
@@ -49,6 +55,11 @@ public class TeilnehmerVerwaltung
             t.Vorname.Equals(vorname.Trim(), StringComparison.OrdinalIgnoreCase) &&
             t.Nachname.Equals(nachname.Trim(), StringComparison.OrdinalIgnoreCase) &&
             t.Geburtsdatum == geburtsdatum);
+    }
+
+    public int GetTeilnehmerNummer()
+    {
+        return _repository.GetTeilnehmerNummer();
     }
 
 }
