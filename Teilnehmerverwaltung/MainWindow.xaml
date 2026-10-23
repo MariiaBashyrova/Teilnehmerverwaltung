@@ -7,26 +7,124 @@
         xmlns:vm="clr-namespace:Teilnehmerverwaltung.ViewModels"
 
         mc:Ignorable="d"
-        Title="Teilnehmer Verwaltung" Height="450" Width="800">
+        Title="Teilnehmer Verwaltung" Height="450" Width="600">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
-    <DockPanel >
-        <TextBlock DockPanel.Dock="Top" Text="Master-View" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
-        <ListBox 
-         ItemsSource="{Binding Teilnehmers}"
-         SelectedItem="{Binding SelectedTeilnehmer}"
-          >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding VollName}" />
-                        <TextBlock Text=" - " />
-       
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid  Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
 
-        </ListBox>
-    </DockPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Teilnehmerliste"/>
+
+
+            <!-- Nachname -->
+            <TextBlock Grid.Row="1" Grid.Column="0"  Text="Suche: "  />
+
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Suche}" />
+        </Grid>
+        <DockPanel Grid.Row="1">
+        <TextBlock DockPanel.Dock="Top" Text="NeuStart IT-Akademie : Teilnehmerverwaltung"/>
+            
+                    <DataGrid
+                ItemsSource="{Binding Teilnehmers}"
+                SelectedItem="{Binding SelectedTeilnehmer}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                SelectionMode="Single"
+                CanUserAddRows="False">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+            Header="TN-Nr."
+            Binding="{Binding TeilnehmerNr}" />
+
+                    <DataGridTextColumn
+            Header="Name"
+            Binding="{Binding VollName}" />
+
+                    <DataGridTextColumn
+            Header="Geburtsdatum"
+            Binding="{Binding Geburtsdatum, StringFormat={}{0:dd.MM.yyyy}}" />
+
+                    <DataGridTextColumn
+            Header="E-Mail"
+            Binding="{Binding EMail}" />
+
+                    <DataGridTextColumn
+            Header="Status"
+            Binding="{Binding Status}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray"/>
+        <DockPanel Grid.Row="3" DockPanel.Dock="Left">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Vorname -->
+                <TextBlock Grid.Row="0" Grid.Column="0"
+               Text="Vorname *"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1"
+             Text="{Binding Vorname}"
+             />
+
+                <!-- Nachname -->
+                <TextBlock Grid.Row="1" Grid.Column="0"
+               Text="Nachname *"
+               />
+
+                <TextBox Grid.Row="1" Grid.Column="1"
+             Text="{Binding Nachname}"
+             />
+
+                <!-- E-Mail -->
+                <TextBlock Grid.Row="2" Grid.Column="0"
+               Text="E-Mail"
+               />
+
+                <TextBox Grid.Row="2" Grid.Column="1"
+             Text="{Binding EMail}"
+            />
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Geb. Datum"/>
+                <DatePicker  Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Geburtsdatum, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Umschulung *"/>
+                <ComboBox Grid.Row ="4" Grid.Column="2" />
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Kostenträger *"/>
+                <ComboBox Grid.Row ="5" Grid.Column="2" />
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="Status *"/>
+                <ComboBox Grid.Row ="6" Grid.Column="2" />
+                <TextBlock Grid.Row="7" Grid.Column="0" Text="* Pflichtfelder"/>
+            </Grid>
+
+        </DockPanel>
+    </Grid>
 </Window>
