@@ -10,7 +10,8 @@ namespace Teilnehmerverwaltung.Repositories;
 public class InMemoryTeilnehmerRepository : ITeilnehmerRepository
 {
     private List<Teilnehmer> _teilnehmer = new();
-
+    private List<Umschulung> _umschulungen = new();
+    private List<Kostentraeger> _kostentraeger = new();
     public InMemoryTeilnehmerRepository()
     {
         TestdatenAnlegen();
@@ -21,7 +22,14 @@ public class InMemoryTeilnehmerRepository : ITeilnehmerRepository
         return true;
        
     }
+    public bool Aktualisieren(Teilnehmer t)
+    {
+        int index = _teilnehmer.FindIndex(x => x.TeilnehmerNr == t.TeilnehmerNr);
+        if (index == -1) return false;
 
+        _teilnehmer[index] = t;
+        return true;
+    }
     public bool Loeschen(Teilnehmer t)
     {
         _teilnehmer.Remove(t);
@@ -29,10 +37,14 @@ public class InMemoryTeilnehmerRepository : ITeilnehmerRepository
     }
 
     public List<Teilnehmer> AlleLaden() => _teilnehmer;
+    public List<Umschulung> AlleUmschulungen() => _umschulungen;
+    public List<Kostentraeger> AlleKostentraeger() => _kostentraeger;
 
     public void TestdatenAnlegen()
     {
         _teilnehmer.Clear();
+        _umschulungen.Clear();
+        _kostentraeger.Clear();
         var fiae25a = new Umschulung(
     "FIAE-25A",
     "Fachinformatiker/in Anwendungsentwicklung",
@@ -54,6 +66,7 @@ public class InMemoryTeilnehmerRepository : ITeilnehmerRepository
             new DateOnly(2028, 3, 1),
             "2.15");
 
+        _umschulungen.AddRange(new[] { fiae25a, fisi25a, fiae26b });
 
         var afaStuttgart = new Kostentraeger(
             1,
@@ -78,7 +91,7 @@ public class InMemoryTeilnehmerRepository : ITeilnehmerRepository
             "Berufsförderungsdienst der Bundeswehr",
             "0711 555-3300",
             "Herr Albrecht");
-
+        _kostentraeger.AddRange(new[] { afaStuttgart, jobcenterStuttgart, drvBw, bfdBundeswehr });
         var teilnehmer = new List<Teilnehmer>
 {
     new Teilnehmer(

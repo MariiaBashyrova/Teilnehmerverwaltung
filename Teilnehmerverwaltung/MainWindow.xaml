@@ -17,6 +17,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid  Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -71,7 +72,7 @@
             </DataGrid>
         </DockPanel>
     <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray"/>
-        <DockPanel Grid.Row="3" DockPanel.Dock="Left">
+        <DockPanel Grid.Row="3" IsEnabled="{Binding FormularAktiv}">
             <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -117,14 +118,20 @@
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Geb. Datum"/>
                 <DatePicker  Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Geburtsdatum, Mode=TwoWay}"/>
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Umschulung *"/>
-                <ComboBox Grid.Row ="4" Grid.Column="2" />
+                <ComboBox Grid.Row ="4" Grid.Column="2" DisplayMemberPath="KursNr" ItemsSource="{Binding Umschulungen}" SelectedItem="{Binding Umschulung, Mode=TwoWay}" />
+                    
                 <TextBlock Grid.Row="5" Grid.Column="0" Text="Kostenträger *"/>
-                <ComboBox Grid.Row ="5" Grid.Column="2" />
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="Status *"/>
-                <ComboBox Grid.Row ="6" Grid.Column="2" />
+                <ComboBox Grid.Row ="5" Grid.Column="2" DisplayMemberPath="Bezeichnung" ItemsSource="{Binding Kostentraegers}" SelectedItem="{Binding Kostentraeger, Mode=TwoWay}" />
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="Status"/>
+                <ComboBox Grid.Row ="6" Grid.Column="2" ItemsSource="{Binding TeilnehmerStatusWerte}" SelectedItem="{Binding Status, Mode=TwoWay}" />
                 <TextBlock Grid.Row="7" Grid.Column="0" Text="* Pflichtfelder"/>
             </Grid>
-
+           
         </DockPanel>
+        <StackPanel  Grid.Row="4" Orientation="Horizontal">
+            <Button Content="Neu" Command="{Binding NeuCommand}" />
+            <Button Content="Speichern" Command="{Binding SpeichernCommand}" />
+            <Button Content="Löschen" Command="{Binding LoeschenCommand}" />
+        </StackPanel>
     </Grid>
 </Window>

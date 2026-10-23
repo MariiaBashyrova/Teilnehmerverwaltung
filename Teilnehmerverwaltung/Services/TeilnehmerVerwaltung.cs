@@ -36,5 +36,19 @@ public class TeilnehmerVerwaltung
     }
 
     public IReadOnlyList<Teilnehmer> AlleTeilnehmer() => _repository.AlleLaden();
-        
+    public IReadOnlyList<Umschulung> AlleUmschulungen() => _repository.AlleUmschulungen();
+    public IReadOnlyList<Kostentraeger> AlleKostentraeger() => _repository.AlleKostentraeger();
+    public bool Pruefen(string vorname, string nachname, string email, DateOnly? geburtsdatum,
+        Umschulung? umschulung, Kostentraeger? kostentraeger, Teilnehmer? aktuellerTeilnehmer)
+    {
+        if (string.IsNullOrWhiteSpace(vorname) || string.IsNullOrWhiteSpace(nachname) ||
+            string.IsNullOrWhiteSpace(email) || !email.Contains('@') || umschulung == null || kostentraeger == null)
+            return false;
+
+        return !_repository.AlleLaden().Any(t => t != aktuellerTeilnehmer &&
+            t.Vorname.Equals(vorname.Trim(), StringComparison.OrdinalIgnoreCase) &&
+            t.Nachname.Equals(nachname.Trim(), StringComparison.OrdinalIgnoreCase) &&
+            t.Geburtsdatum == geburtsdatum);
+    }
+
 }
