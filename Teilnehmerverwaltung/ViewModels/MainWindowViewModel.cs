@@ -143,6 +143,9 @@ internal class MainWindowViewModel : ViewModelBase
         LoeschenCommand = new RelayCommand(Loeschen, KannLoeschen);
         TeilnehmerView = CollectionViewSource.GetDefaultView(Teilnehmers);
         TeilnehmerView.Filter = FilterTeilnehmer;
+        ResetStatusFilterCommand = new RelayCommand(() => AusgewaehlterStatus = null);
+        ResetUmschulungFilterCommand = new RelayCommand(() => AusgewaehlteUmschulung = null);
+        ResetSucheCommand = new RelayCommand(() => Suche = string.Empty);
     }
     #endregion
     private void FormularFuellen()
@@ -176,6 +179,9 @@ internal class MainWindowViewModel : ViewModelBase
     public RelayCommand NeuCommand { get; }
     public RelayCommand SpeichernCommand { get; }
     public RelayCommand LoeschenCommand { get; }
+    public RelayCommand ResetStatusFilterCommand { get; }
+    public RelayCommand ResetUmschulungFilterCommand { get; }
+    public RelayCommand ResetSucheCommand { get; }
 
     private void Loeschen()
     {
@@ -223,19 +229,38 @@ internal class MainWindowViewModel : ViewModelBase
 
         DateOnly? geburtsdatum = Geburtsdatum.HasValue ? DateOnly.FromDateTime(Geburtsdatum.Value) : null;
 
-        if (!TeilnehmerVerwaltung.Pruefen(
-                Vorname,
+        string fehler = TeilnehmerVerwaltung.Pruefen(Vorname,
                 Nachname,
-                EMail,
-                geburtsdatum, Umschulung, Kostentraeger, SelectedTeilnehmer))
+                EMail, Umschulung, Kostentraeger);
+        if (!string.IsNullOrEmpty(fehler))
         {
             MessageBox.Show(
-                "Bitte überprüfen Sie die Eingaben. " +
-                "Möglicherweise existiert dieser Teilnehmer bereits.");
+               fehler);
 
             return;
         }
 
+        Teilnehmer? doppelterTeilnehmer = TeilnehmerVerwaltung.DoppeltenTeilnehmerFinden(Vorname, Nachname, geburtsdatum, SelectedTeilnehmer);
+        if (doppelterTeilnehmer != null)
+        {
+            string meldung =
+                $"Ein Teilnehmer mit diesen Daten existiert bereits:\n\n" +
+                $"Name: {doppelterTeilnehmer.VollName}\n" +
+                $"Geburtsdatum: {doppelterTeilnehmer.Geburtsdatum:dd.MM.yyyy}\n\n" +
+                "Möchten Sie trotzdem einen neuen Teilnehmer anlegen?";
+
+            MessageBoxResult ergebnis = MessageBox.Show(
+                meldung,
+                "Möglicher doppelter Teilnehmer",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (ergebnis == MessageBoxResult.No)
+            {
+                SelectedTeilnehmer = doppelterTeilnehmer;
+                return;
+            }
+        }
         // 2. Daten übernehmen
         int tnummer = (SelectedTeilnehmer == null)? TeilnehmerVerwaltung.GetTeilnehmerNummer() : SelectedTeilnehmer.TeilnehmerNr;
         
@@ -314,6 +339,7 @@ internal class MainWindowViewModel : ViewModelBase
                 TeilnehmerView.Refresh();
         }
     }
+   
     private bool FilterTeilnehmer(object obj)
     {
         if (obj is not Teilnehmer teilnehmer)

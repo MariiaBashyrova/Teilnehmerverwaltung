@@ -134,17 +134,26 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Teilnehmerliste" FontWeight="Bold"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Teilnehmerliste" FontWeight="Bold" Grid.ColumnSpan="2"/>
+            <TextBlock Grid.Row="0" Grid.Column="3" Text="Status"/>
+            <TextBlock Grid.Row="0" Grid.Column="5" Text="Kurs"/>
+
             <TextBlock Grid.Row="1" Grid.Column="0"  Text="Suche: "  />
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Suche, UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox Grid.Row="1" Grid.Column="3" ItemsSource="{Binding TeilnehmerStatusWerte}" SelectedItem="{Binding AusgewaehlterStatus, Mode=TwoWay}"/>
-            <ComboBox Grid.Row="1" Grid.Column="2" DisplayMemberPath="KursNr" ItemsSource="{Binding Umschulungen}" SelectedItem="{Binding AusgewaehlteUmschulung, Mode=TwoWay}"/>
+            <Button MinWidth="10" Grid.Row="1" Grid.Column="2" Content="✕"  Command="{Binding ResetSucheCommand}" />
+            <ComboBox Grid.Row="1" Grid.Column="3" ItemsSource="{Binding TeilnehmerStatusWerte }" SelectedItem="{Binding AusgewaehlterStatus, Mode=TwoWay}"/>
+            <Button MinWidth="10" Grid.Row="1" Grid.Column="4" Content="✕"  Command="{Binding ResetStatusFilterCommand}" />
+            <ComboBox Grid.Row="1" Grid.Column="5" DisplayMemberPath="KursNr" ItemsSource="{Binding Umschulungen}" SelectedItem="{Binding AusgewaehlteUmschulung, Mode=TwoWay}"/>
+            <Button MinWidth="10" Grid.Row="1" Grid.Column="6" Content="✕"  Command="{Binding ResetUmschulungFilterCommand}" />
 
         </Grid>
 

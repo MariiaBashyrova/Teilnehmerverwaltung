@@ -44,17 +44,31 @@ public class TeilnehmerVerwaltung
     public IReadOnlyList<Teilnehmer> AlleTeilnehmer() => _repository.AlleLaden();
     public IReadOnlyList<Umschulung> AlleUmschulungen() => _repository.AlleUmschulungen();
     public IReadOnlyList<Kostentraeger> AlleKostentraeger() => _repository.AlleKostentraeger();
-    public bool Pruefen(string vorname, string nachname, string email, DateOnly? geburtsdatum,
-        Umschulung? umschulung, Kostentraeger? kostentraeger, Teilnehmer? aktuellerTeilnehmer)
+    public string Pruefen(
+    string vorname,
+    string nachname,
+    string email,
+    Umschulung? umschulung,
+    Kostentraeger? kostentraeger)
     {
-        if (string.IsNullOrWhiteSpace(vorname) || string.IsNullOrWhiteSpace(nachname) ||
-            (!email.Contains('@') && !string.IsNullOrWhiteSpace(email)) || umschulung == null || kostentraeger == null)
-            return false;
+        StringBuilder fehler = new();
 
-        return !_repository.AlleLaden().Any(t => t != aktuellerTeilnehmer &&
-            t.Vorname.Equals(vorname.Trim(), StringComparison.OrdinalIgnoreCase) &&
-            t.Nachname.Equals(nachname.Trim(), StringComparison.OrdinalIgnoreCase) &&
-            t.Geburtsdatum == geburtsdatum);
+        if (string.IsNullOrWhiteSpace(vorname))
+            fehler.AppendLine("Vorname darf nicht leer sein.");
+
+        if (string.IsNullOrWhiteSpace(nachname))
+            fehler.AppendLine("Nachname darf nicht leer sein.");
+
+        if (!string.IsNullOrWhiteSpace(email) && !email.Contains('@'))
+            fehler.AppendLine("Die E-Mail-Adresse ist ungültig.");
+
+        if (umschulung == null)
+            fehler.AppendLine("Bitte eine Umschulung auswählen.");
+
+        if (kostentraeger == null)
+            fehler.AppendLine("Bitte einen Kostenträger auswählen.");
+
+        return fehler.ToString();
     }
 
     public int GetTeilnehmerNummer()
@@ -62,4 +76,16 @@ public class TeilnehmerVerwaltung
         return _repository.GetTeilnehmerNummer();
     }
 
+    public Teilnehmer? DoppeltenTeilnehmerFinden(
+    string vorname,
+    string nachname,
+    DateOnly? geburtsdatum,
+    Teilnehmer? aktuellerTeilnehmer = null)
+    {
+        return _repository.AlleLaden().FirstOrDefault(t =>
+            t != aktuellerTeilnehmer &&
+            t.Vorname.Equals(vorname.Trim(), StringComparison.OrdinalIgnoreCase) &&
+            t.Nachname.Equals(nachname.Trim(), StringComparison.OrdinalIgnoreCase) &&
+            t.Geburtsdatum == geburtsdatum);
+    }
 }
